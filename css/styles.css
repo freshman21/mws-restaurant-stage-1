@@ -114,12 +114,12 @@ nav h1 a {
 
 
 #breadcrumb {
-    padding: 10px 20px 16px;
+    padding: 10px 40px 16px;
     list-style: none;
     background-color: #eee;
     font-size: 17px;
     margin: 0;
-    width: calc(100% - 40px);
+    width: calc(50% - 80px);
 }
 
 
@@ -301,7 +301,7 @@ nav h1 a {
 
 
 #restaurant-img {
-	width: 80%;
+	width: 90%;
 }
 
 
@@ -314,14 +314,14 @@ nav h1 a {
 #restaurant-cuisine {
   background-color: #333;
   color: #ddd;
-  font-size: 11pt;
+  font-size: 12pt;
   font-weight: 300;
   letter-spacing: 10px;
   margin: 0 0 20px;
   padding: 2px 0;
   text-align: center;
   text-transform: uppercase;
-	width: 80%;
+	width: 90%;
 }
 
 
@@ -329,13 +329,13 @@ nav h1 a {
 #reviews-container {
   border-bottom: 1px solid #d9d9d9;
   border-top: 1px solid #fff;
-  padding: 140px 20px 30px;
+  padding: 140px 40px 30px;
   width: 50%;
 }
 
 
 #reviews-container {
-  padding: 30px 20px 80px;
+  padding: 30px 40px 80px;
 }
 
 
@@ -356,14 +356,14 @@ nav h1 a {
 
 #reviews-list li {
   background-color: #fff;
-  border: 2px solid #f3f3f3;
+    border: 2px solid #f3f3f3;
   display: block;
   list-style-type: none;
   margin: 0 0 30px;
   overflow: hidden;
-  padding: 0 10px 20px;
+  padding: 0 20px 20px;
   position: relative;
-  width: 65%;
+  width: 85%;
 }
 
 
@@ -374,8 +374,4 @@ nav h1 a {
 
 #restaurant-hours td {
   color: #666;
-	display: block;
 }
-
-/* ====================== Media Queries ====================== */
-/* ====================== Media Queries ====================== */
