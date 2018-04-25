@@ -401,7 +401,7 @@ nav h1 a {
 
 
 /* ====================== 6.1 650px Breakpoint ====================== */
-@media screen and (min-width:650px) {
+@media screen and (min-width:650px) and (max-width: 949px) {
 
 	/* Navigation */
 	#breadcrumb {
@@ -452,4 +452,21 @@ nav h1 a {
 	}
 
 
+}
+/* ====================== 6.2 950px Breakpoint ====================== */
+@media screen and (min-width:950px) {
+
+	#restaurants-list {
+		
+	}
+
+	#restaurants-list li {
+		display: inline-grid;
+		margin: 0 15px 15px 0;
+		width: calc(32% - 90px);
+	}
+
+	#restaurants-list li:nth-of-type(3n) {
+		margin: 0 0 15px;
+	}
 }
