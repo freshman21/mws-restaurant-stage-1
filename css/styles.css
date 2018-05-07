@@ -12,7 +12,9 @@ INDEX :
 5.  Restaurant Details
 
 6.  Media Queries / Breakpoints
+6.0 Mobile Adjustment
 6.1 650px Breakpoint
+6.2 950px Breakpoint
 */
 
 
@@ -378,31 +380,127 @@ nav h1 a {
   list-style-type: none;
   margin: 0 0 30px;
   overflow: hidden;
-  padding: 0 20px 20px;
+  padding: 0 0 20px;
   position: relative;
-  width: 85%;
 }
 
 
 #reviews-list li p {
   margin: 0 0 10px;
+	padding: 20px;
+}
+
+
+#reviews-list .reviews-name {
+	background-color: #000;
+	color: #fff;
+	font-size: 14pt;
+	display: inline-block;
+	width: calc(30% - 40px);
+	min-height: 27px;
+	max-height: 27px;
+}
+
+
+#reviews-list .reviews-date {
+	background-color: #000;
+	color: #eee;
+	display: inline-block;
+	text-align: right;
+	width: calc(70% - 40px);
+	min-height: 27px;
+	max-height: 27px;
+	line-height: 2.5;
+	vertical-align: top;
+}
+
+
+#reviews-list .reviews-rating {
+	text-transform: uppercase;
+	border-radius: 5px;
+	background-color: orange;
+	color: #fff;
+	padding: 5px 10px;
+  width: 70px;
+  margin: 10px 0 0 20px;
+}
+
+
+#reviews-list .reviews-comments {
+
 }
 
 
 #restaurant-hours {
 	display: inline-table;
 	text-align: left;
+	width: 80%;
 }
 
 
 #restaurant-hours td {
   color: #666;
+	vertical-align: top;
+	width: 50%;
 }
 
 /* ====================== 6. Media Queries / Breakpoints ====================== */
 
+/* ====================== 6.0 Mobile Adjustment ====================== */
+@media screen and (max-width: 352px) {
+	#reviews-list .reviews-name {
+		border-radius: 5px;
+		background-color: #000;
+		color: #fff;
+		padding: 5px 10px;
+	  width: 70px;
+	  margin: 10px 0 0 20px;
+	}
+
+
+	#reviews-list .reviews-date {
+		border-radius: 5px;
+		background-color: #000;
+		color: #fff;
+		text-align: left;
+		padding: 5px 10px;
+	  margin: 10px 0 0 20px;
+	}
+}
 
 /* ====================== 6.1 650px Breakpoint ====================== */
+
+@media screen and (min-width:650px) {
+
+	/* Maps */
+	.inside #map-container {
+		height: 87%;
+		position: fixed;
+		right: 0;
+		top: 80px;
+		width: 50%;
+	}
+
+	/* Restaurant */
+
+	#restaurant-container {
+		border-bottom: 1px solid #d9d9d9;
+		border-top: 1px solid #fff;
+		padding: 140px 20px 30px;
+		width: calc(50% - 40px);
+	}
+
+	#restaurant-hours {
+		display: inline-table;
+		text-align: left;
+		width: 90%;
+	}
+
+
+}
+
+
+/* ====================== 650px Breakpoint limited to 949px ====================== */
 @media screen and (min-width:650px) and (max-width: 949px) {
 
 	/* Navigation */
@@ -413,25 +511,6 @@ nav h1 a {
 	    font-size: 17px;
 	    margin: 0;
 	    width: calc(50% - 80px);
-	}
-
-
-	/* Maps */
-	.inside #map-container {
-	  height: 87%;
-	  position: fixed;
-	  right: 0;
-	  top: 80px;
-	  width: 50%;
-	}
-
-	/* Restaurant */
-
-	#restaurant-container {
-		border-bottom: 1px solid #d9d9d9;
-	  border-top: 1px solid #fff;
-	  padding: 140px 40px 30px;
-	  width: 50%;
 	}
 
 	/* Restaurants */
