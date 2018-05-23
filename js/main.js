@@ -141,11 +141,11 @@ createRestaurantHTML = (restaurant) => {
 
   const image = document.createElement('img');
   image.className = 'restaurant-img';
-  image.src = DBHelper.imageUrlForRestaurant(restaurant);
-  /**
-  * A11y addition 25/4/'18
-  * restaurant pictures need alt/title for a11y
-  */
+  image.src = DBHelper.imageUrlForRestaurant(restaurant, 's');
+  image.srcset = DBHelper.imageUrlForRestaurant(restaurant, 's') + ' 369w, '
+  + DBHelper.imageUrlForRestaurant(restaurant, 'm') + ' 424w, '
+  + DBHelper.imageUrlForRestaurant(restaurant, 'l') + ' 821w, '
+  +DBHelper.imageUrlForRestaurant(restaurant, 'xl') + ' 1600w';
   image.alt = DBHelper.imageAltForRestaurant(restaurant);
   image.title = DBHelper.imageAltForRestaurant(restaurant);
   li.append(image);

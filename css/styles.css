@@ -13,6 +13,7 @@ INDEX :
 
 6.  Media Queries / Breakpoints
 6.0 Mobile Adjustment
+6.0.1 550px Breakpoint
 6.1 650px Breakpoint
 6.2 950px Breakpoint
 */
@@ -468,9 +469,20 @@ nav h1 a {
 	}
 }
 
+/* ====================== 6.0.1 550px Breakpoint ====================== */
+
+@media screen and (min-width:550px) {
+
+}
+
 /* ====================== 6.1 650px Breakpoint ====================== */
 
 @media screen and (min-width:650px) {
+
+
+	nav h1 a {
+	  font-size: 18pt;
+	}
 
 	/* Maps */
 	.inside #map-container {
@@ -490,10 +502,17 @@ nav h1 a {
 		width: calc(50% - 40px);
 	}
 
+
 	#restaurant-hours {
 		display: inline-table;
 		text-align: left;
 		width: 90%;
+	}
+
+	/* Reviews */
+
+	#reviews-list li {
+		width: 40%;
 	}
 
 
@@ -525,17 +544,15 @@ nav h1 a {
 		margin: 0 0 15px;
 	}
 
-	/* Footer */
-	.inside #footer {
-	  bottom: 0;
-	  position: absolute;
-	  width: 50%;
-	}
-
 
 }
 /* ====================== 6.2 950px Breakpoint ====================== */
 @media screen and (min-width:950px) {
+
+
+	nav h1 a {
+	  font-size: 22pt;
+	}
 
 
 	/* Filtering  */
@@ -558,7 +575,23 @@ nav h1 a {
 		width: calc(32% - 90px);
 	}
 
-	#restaurants-list li:nth-of-type(3n) {
-		margin: 0 0 15px;
+}
+
+/* ====================== 6.3 1240px Breakpoint ====================== */
+@media screen and (min-width:1240px) {
+	/* Restaurant Listing */
+	#restaurants-list li {
+		width: calc(25% - 90px);
 	}
+
+
+}
+/* ====================== 6.4 1240px Breakpoint ====================== */
+@media screen and (min-width:1600px) {
+	/* Restaurant Listing */
+	#restaurants-list li {
+		width: calc(20% - 90px);
+	}
+
+
 }
