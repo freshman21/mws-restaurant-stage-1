@@ -1,4 +1,4 @@
-const currentCache = 'my-first-sw-cache';
+const currentCache = 'sw-cacheV1';
 
 self.addEventListener('install', (event) => {
   const cachedUrls = [
@@ -28,6 +28,7 @@ self.addEventListener('fetch', (event) => {
             return caches.open(currentCache)
               .then((cache) => {
                 cache.put(event.request, response.clone());
+                console.log(event.response);
                 return response;
               });
           } else {
@@ -36,7 +37,7 @@ self.addEventListener('fetch', (event) => {
         })
         .catch((error) => {
           return new Response(
-            'Connect to a Wi-Fi or mobile network to view this content', {
+            'Connect to a Wi-Fi or Mobile network to get more meat on your bone phone 🍖', {
               status: 404,
               statusText: error.message
             });
