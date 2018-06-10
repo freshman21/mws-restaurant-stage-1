@@ -30,23 +30,21 @@
 <body>
   <header>
     <nav>
-      <h1><a href="/">UdacEATy 🍽</a></h1>
+      <h1><a tabindex="0" href="/">UdacEATy 🍽</a></h1>
     </nav>
   </header>
   <main id="maincontent">
-    <a class="skip-link" href="#filter-options" alt="Skip to restaurants filter">Skip to restaurants filter</a>
+    <a tabindex="0" class="skip-link" href="#filter-options" alt="Skip to restaurants filter">Skip to restaurants filter</a>
     <section id="map-container">
-      <div id="map"></div>
+      <div tabindex="0" id="map" role="application" aria-label="Map with restaurants"></div>
     </section>
-    <section>
+    <section aria-label="Filter restaurants by neighborhood and cuisine type">
       <div id="filter-options" class="filter-options">
         <h2>Filter Results</h2>
-        <label for="neighborhoods-select" class="hidden-label">Select neighborhood</label>
-        <select id="neighborhoods-select" name="neighborhoods" onchange="updateRestaurants()">
+        <select tabindex="0" id="neighborhoods-select" name="neighborhoods" aria-label="Select neighborhood" onchange="updateRestaurants()">
           <option value="all">All Neighborhoods</option>
         </select>
-        <label for="cuisines-select" class="hidden-label">Select cuisine type</label>
-        <select id="cuisines-select" name="cuisines" onchange="updateRestaurants()">
+        <select tabindex="0" id="cuisines-select" name="cuisines" aria-label="Select cuisine type" onchange="updateRestaurants()">
           <option value="all">All Cuisines</option>
         </select>
       </div>
@@ -60,7 +58,7 @@
 
 
   <footer id="footer">
-    <div>Copyright (c) 2018 </div><a href="/"><strong>UdacEATy 🍽</strong></a><div> All Rights Reserved.</div>
+    <div>Copyright (c) 2018 </div><a tabindex="0" href="/"><strong>UdacEATy 🍽</strong></a><div> All Rights Reserved.</div>
   </footer>
 
 </body>

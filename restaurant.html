@@ -34,11 +34,11 @@
   <header>
     <!-- Beginning nav -->
     <nav>
-      <h1><a href="/">UdacEATy 🍽</a></h1>
+      <h1><a tabindex="0" href="/">UdacEATy 🍽</a></h1>
     </nav>
     <!-- Beginning breadcrumb -->
-    <ul id="breadcrumb" >
-      <li><a href="/">Home</a></li>
+    <ul id="breadcrumb" aria-label="Breadcrumb Navigation" aria-role="Navigation">
+      <li><a tabindex="0" href="/">Home</a></li>
     </ul>
     <!-- End breadcrumb -->
     <!-- End nav -->
@@ -48,14 +48,14 @@
   <!-- Beginning main -->
   <main id="maincontent">
     <!-- Beginning map -->
-    <a class="skip-link" href="#restaurant-container" alt="Skip to restaurant details">Skip to restaurant details</a>
+    <a tabindex="0" class="skip-link" href="#restaurant-container" alt="Skip to restaurant details">Skip to restaurant details</a>
     <section id="map-container">
-      <div id="map"></div>
+      <div tabindex="0" id="map" role="application" aria-label="Map with restaurants"></div>
     </section>
     <!-- End map -->
     <!-- Beginning restaurant -->
     <section id="restaurant-container">
-      <h1 id="restaurant-name"></h1>
+      <h2 id="restaurant-name"></h2>
       <img id="restaurant-img">
       <p id="restaurant-cuisine"></p>
       <p id="restaurant-address"></p>
@@ -72,7 +72,7 @@
 
   <!-- Beginning footer -->
   <footer id="footer">
-    <div>Copyright (c) 2018 </div><a href="/"><strong>UdacEATy 🍽</strong></a><div> All Rights Reserved.</div>
+    <div>Copyright (c) 2018 </div><a tabindex="0" href="/"><strong>UdacEATy 🍽</strong></a><div> All Rights Reserved.</div>
   </footer>
   <!-- End footer -->
 
