@@ -15,7 +15,7 @@ class DBHelper {
   /**
    * Fetch all restaurants.
    */
-  static fetchRestaurants(callback) {
+  static fetchRestaurants(callback, id) {
     // let xhr = new XMLHttpRequest();
     // xhr.open('GET', DBHelper.DATABASE_URL);
     // xhr.onload = () => {
@@ -31,7 +31,13 @@ class DBHelper {
     // };
     // xhr.send();
 
-    fetch(DBHelper.DATABASE_URL + `/restaurants`, {
+    let restaurantsURL = DBHelper.DATABASE_URL + `/restaurants`
+
+    if(id) {
+      restaurantsURL += `/${id}`;
+    }
+
+    fetch(restaurantsURL, {
       method: `GET`
     })
     .then(response => {
@@ -54,14 +60,15 @@ class DBHelper {
       if (error) {
         callback(error, null);
       } else {
-        const restaurant = restaurants.find(r => r.id == id);
+        const restaurant = restaurants;
         if (restaurant) { // Got the restaurant
+          //console.log("YEA-YUH! RESTAURANTS BY ID! HM, HM! HM, HM! I SHOWED HIM!");
           callback(null, restaurant);
         } else { // Restaurant does not exist in the database
           callback('Restaurant does not exist', null);
         }
       }
-    });
+    }, id);
   }
 
   /**
