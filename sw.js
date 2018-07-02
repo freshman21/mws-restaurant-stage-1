@@ -6,10 +6,10 @@ self.addEventListener('install', (event) => {
     '/js/dbhelper.js',
     '/js/restaurant_info.js',
     '/js/main.js',
+    '/js/sw_register.js',
     '/index.html',
     '/restaurant.html',
     '/css/styles.css',
-    '/data/restaurants.json',
     '/images/'
   ];
   event.waitUntil(
