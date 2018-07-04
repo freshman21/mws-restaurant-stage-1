@@ -15,7 +15,7 @@ This code is **Stage 1** and bits of **Stage 2**, so far it has :
 * Service Worker basic implementation
 
 **Stage 2 :**
-* REST Server using **fetch** instead
+* REST Server using _**fetch**_ instead of _**xhr**_
 
 
 
