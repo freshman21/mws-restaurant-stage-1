@@ -1,0 +1,28 @@
+{
+  "name": "mws-restaurant-stage-1",
+  "version": "1.0.0",
+  "description": "package file for project",
+  "main": "sw.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tiago-m-dias/mws-restaurant-stage-1.git"
+  },
+  "author": "Tiago Dias",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tiago-m-dias/mws-restaurant-stage-1/issues"
+  },
+  "homepage": "https://github.com/tiago-m-dias/mws-restaurant-stage-1#readme",
+  "devDependencies": {
+    "browser-sync": "^2.24.5",
+    "gulp": "^4.0.0",
+    "gulp-autoprefixer": "^5.0.0"
+  },
+  "dependencies": {
+    "gulp-eslint": "^4.0.2",
+    "gulp-sass": "^4.0.1"
+  }
+}
