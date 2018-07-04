@@ -14,8 +14,8 @@ This code is **Stage 1** and bits of **Stage 2**, so far it has :
 * ARIA
 * Service Worker basic implementation
 
-**Stage 2 : **
-* REST Server
+**Stage 2 :**
+* REST Server using **fetch** instead
 
 
 
