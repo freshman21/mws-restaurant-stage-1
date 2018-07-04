@@ -2,9 +2,27 @@
 ---
 #### _Three Stage Course Material Project - Restaurant Reviews_
 
-## Project Overview: Stage 1
+## Project Overview
 
-For the **Restaurant Reviews** projects, you will incrementally convert a static webpage to a mobile-ready web application. In **Stage One**, you will take a static design that lacks accessibility and convert the design to be responsive on different sized displays and accessible for screen reader use. You will also add a service worker to begin the process of creating a seamless offline experience for your users.
+This code is **Stage 1** and bits of **Stage 2**, so far it has :
+
+**Stage 1 :**
+* Responsive Layout
+* Responsive images
+* Restaurants List
+* Restaurant Info
+* ARIA
+* Service Worker basic implementation
+
+**Stage 2 : **
+* REST Server
+
+
+
+**Currently working on:**
+* Gulp build
+* IndexedDB
+* Offline capabilities (caches and IndexedDB)
 
 
 ### How to run it?
@@ -21,7 +39,7 @@ In a terminal, check the version of Python you have: `python -V`. If you have Py
 
 5. As of **Stage 2** the restaurants json object is created on a separate server, the code is in https://github.com/tiago-m-dias/mws-restaurant-stage-2
 
-After downloading, to run the server use `node server` on the code folder. The object will be visible at : `http://localhost:1337/restaurants`
+6. After downloading, to run the server use `node server` on the code folder. The object will be visible at : `http://localhost:1337/restaurants`
 
 
 ### Note about ES6
