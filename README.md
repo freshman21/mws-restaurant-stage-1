@@ -37,7 +37,7 @@ In a terminal, check the version of Python you have: `python -V`. If you have Py
 
 
 
-5. As of **Stage 2** the restaurants json object is created on a separate server, the code is in https://github.com/tiago-m-dias/mws-restaurant-stage-2
+5. As of **Stage 2** the restaurants json object is created on a separate server, the code is [here](https://github.com/tiago-m-dias/mws-restaurant-stage-2)
 
 6. After downloading, to run the server use `node server` on the code folder. The object will be visible at : `http://localhost:1337/restaurants`
 
