@@ -1,6 +1,14 @@
-const currentCache = 'sw-cacheV1';
+const currentCache = "sw-cacheV2";
+import idb from "idb";
 
-self.addEventListener('install', (event) => {
+const dbPromise = idb.open("MWSrestaurant", 0, upgradeDB => {
+  switch (upgradeDB.oldVersion) {
+    case 0:
+      upgradeDB.createObjectStore("restaurants", {keyPath: "id"});
+  }
+});
+
+self.addEventListener("install", event => {
   const cachedUrls = [
     '/',
     '/js/dbhelper.js',
@@ -13,35 +21,49 @@ self.addEventListener('install', (event) => {
     '/images/'
   ];
   event.waitUntil(
-    caches.open(currentCache).then((cache) => {
-      cache.addAll(cachedUrls);
-    })
-  );
-});
-
-
-self.addEventListener('fetch', (event) => {
-  event.respondWith(
-    caches.match(event.request).then((response) => {
-      return response || fetch(event.request).then((response) => {
-          if (response.ok) {
-            return caches.open(currentCache)
-              .then((cache) => {
-                cache.put(event.request, response.clone());
-                console.log(event.response);
-                return response;
-              });
-          } else {
-            return response;
-          }
-        })
-        .catch((error) => {
-          return new Response(
-            'Connect to a Wi-Fi or Mobile network to get more meat on your bone phone 🍖', {
-              status: 404,
-              statusText: error.message
-            });
+    caches.open(currentCache).then(cache => {
+      return cache.addAll(cachedUrls)
+        .catch(error => {
+          console.log("Caches open failed: " + error);
         });
     })
   );
 });
+
+self.addEventListener("fetch", event => {
+  let cacheRequest = event.request;
+  let cacheUrlObj = new URL(event.request.url);
+  if (event.request.url.indexOf("restaurant.html") > -1) {
+    const cacheURL = "restaurant.html";
+    cacheRequest = new Request(cacheURL);
+  }
+  event.request.mode = "no-cors";
+
+  handleNonAJAXEvent(event);
+});
+
+handleNonAJAXEvent = event => {
+  event.respondWith(
+    caches.match(cacheRequest).then(response => {
+      return (
+        response ||
+        fetch(event.request)
+          .then(fetchResponse => {
+            return caches.open(currentCache).then(cache => {
+              cache.put(event.request, fetchResponse.clone());
+              return fetchResponse;
+            });
+          })
+          .catch(e => {
+            return new Response(
+              'Connect to a Wi-Fi or Mobile network to get more meat on your bone phone 🍖',
+              {
+                status: 404,
+                statusText: e.message
+              }
+            );
+          })
+      );
+    })
+  );
+};
