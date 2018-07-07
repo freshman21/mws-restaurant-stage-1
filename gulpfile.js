@@ -3,6 +3,7 @@ const gulp = require('gulp');
 const gulpLoadPlugins = require('gulp-load-plugins');
 const browserify = require('browserify');
 const babelify = require('babelify');
+const sourceStream = require("vinyl-source-stream");
 const browserSync = require('browser-sync').create();
 const del = require('del');
 const wiredep = require('wiredep').stream;
@@ -38,6 +39,18 @@ gulp.task('scripts', () => {
     .pipe(reload({stream: true}));
 });
 
+//service worker babelifica-ti-oooon
+gulp.task("serviceWorkerGulp", () => {
+  const babelSW = browserify({
+    debug: true
+  });
+
+  return babelSW.transform(babelify)
+  .require("app/sw.js", { entry: true}).bundle()
+  .pipe(sourceStream("sw.js"))
+  .pipe(gulp.dest(".tmp/"));
+});
+
 function lint(files) {
   return gulp.src(files)
     .pipe($.eslint({ fix: true }))
@@ -55,7 +68,7 @@ gulp.task('lint:test', () => {
     .pipe(gulp.dest('test/spec'));
 });
 
-gulp.task('html', ['styles', 'scripts'], () => {
+gulp.task('html', ['styles', 'scripts', 'serviceWorkerGulp'], () => {
   return gulp.src('app/*.html')
     .pipe($.useref({searchPath: ['.tmp', 'app', '.']}))
     .pipe($.if(/\.js$/, $.uglify({compress: {drop_console: true}})))
@@ -97,7 +110,7 @@ gulp.task('extras', () => {
 gulp.task('clean', del.bind(null, ['.tmp', 'dist']));
 
 gulp.task('serve', () => {
-  runSequence(['clean', 'wiredep'], ['styles', 'scripts', 'fonts'], () => {
+  runSequence(['clean', 'wiredep'], ['styles', 'scripts', 'fonts', 'serviceWorkerGulp'], () => {
     browserSync.init({
       notify: false,
       port: 9000,
@@ -117,6 +130,7 @@ gulp.task('serve', () => {
 
     gulp.watch('app/css/**/*.css', ['styles']);
     gulp.watch('app/js/**/*.js', ['scripts']);
+    gulp.watch('app/sw.js', ['serviceWorkerGulp']);
     gulp.watch('app/fonts/**/*', ['fonts']);
     gulp.watch('bower.json', ['wiredep', 'fonts']);
   });

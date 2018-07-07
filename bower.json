@@ -1,5 +1,7 @@
 {
   "name": "mws-restaurant-stage-1",
   "private": true,
-  "dependencies": {}
+  "dependencies": {
+    "jquery": "^3.3.1"
+  }
 }

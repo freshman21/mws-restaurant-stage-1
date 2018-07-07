@@ -42,7 +42,7 @@ self.addEventListener("fetch", event => {
   handleNonAJAXEvent(event);
 });
 
-handleNonAJAXEvent = event => {
+const handleNonAJAXEvent = event => {
   event.respondWith(
     caches.match(cacheRequest).then(response => {
       return (
