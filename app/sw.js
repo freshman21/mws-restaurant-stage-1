@@ -1,5 +1,5 @@
-const currentCache = "sw-cacheV2";
 import idb from "idb";
+const currentCache = "sw-cacheV2";
 
 const dbPromise = idb.open("MWSrestaurant", 0, upgradeDB => {
   switch (upgradeDB.oldVersion) {
@@ -23,8 +23,8 @@ self.addEventListener("install", event => {
   event.waitUntil(
     caches.open(currentCache).then(cache => {
       return cache.addAll(cachedUrls)
-        .catch(error => {
-          console.log("Caches open failed: " + error);
+        .catch(e => {
+          console.log("Caches open failed: " + e);
         });
     })
   );
