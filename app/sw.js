@@ -1,10 +1,10 @@
 import idb from "idb";
 const currentCache = "sw-cacheV2";
 
-const dbPromise = idb.open("MWSrestaurant", 0, upgradeDB => {
+const dbPromise = idb.open("MWSrestaurant", 1, upgradeDB => {
   switch (upgradeDB.oldVersion) {
     case 0:
-      upgradeDB.createObjectStore("restaurants", {keyPath: "id"});
+      upgradeDB.createObjectStore("restaurants", {keyPath: "id" });
   }
 });
 
@@ -22,9 +22,19 @@ self.addEventListener("install", event => {
   ];
   event.waitUntil(
     caches.open(currentCache).then(cache => {
-      return cache.addAll(cachedUrls)
+      return cache.addAll([
+        "/",
+        "/js/dbhelper.js",
+        "/js/restaurant_info.js",
+        "/js/main.js",
+        "js/sw_register.js",
+        "/index.html",
+        "/restaurant.html",
+        "/css/styles.css",
+        "/images/"
+        ])
         .catch(e => {
-          console.log("Caches open failed: " + e);
+          console.log("Caching failed: " + e);
         });
     })
   );
@@ -32,27 +42,68 @@ self.addEventListener("install", event => {
 
 self.addEventListener("fetch", event => {
   let cacheRequest = event.request;
-  let cacheUrlObj = new URL(event.request.url);
-  if (event.request.url.indexOf("restaurant.html") > -1) {
-    const cacheURL = "restaurant.html";
-    cacheRequest = new Request(cacheURL);
-  }
-  event.request.mode = "no-cors";
+  // check for URL to handle API requests separately, based on Doug Brown Webinar
+  const checkForUrl = new URL(event.request.url);
+  if(checkForUrl.port === "1337") {
+    const parts = checkForUrl.pathname.split("/");
 
-  handleNonAJAXEvent(event);
+    let id;
+    if(parts[parts.length - 1] === "restaurants")
+      id = "-1";
+    else
+      id = parts[parts.length - 1];
+    handleAJAXEvent(event, id);
+  } else {
+    handleNonAJAXEvent(event, cacheRequest);
+  }
 });
 
-const handleNonAJAXEvent = event => {
+// handleAJAXEvent || handleNonAJAXEvent based on Doug Brown Webinar
+
+const handleAJAXEvent = (event, id) => {
   event.respondWith(
-    caches.match(cacheRequest).then(response => {
+    dbPromise.then(dataBase => {
+      return dataBase.transaction("restaurants").objectStore("restaurants").get(id);
+    }).then(data => {
       return (
-        response ||
-        fetch(event.request)
-          .then(fetchResponse => {
-            return caches.open(currentCache).then(cache => {
-              cache.put(event.request, fetchResponse.clone());
-              return fetchResponse;
+        (data && data.data) ||
+        fetch(event.request).then(response => response.json())
+        .then(json => {
+          return dbPromise.then(dataBase => {
+            let transact = dataBase.transaction("restaurants", "readwrite");
+            transact.objectStore("restaurants").put({ id: id, data: json });
+            return json;
+          });
+        })
+      );
+    }).then(response => {
+      return new Response(JSON.stringify(response));
+    }).catch(e => {
+      return new Response(
+        'Error getting JSON',
+        {
+          status: 500
+        }
+      );
+    })
+  );
+};
+
+
+const handleNonAJAXEvent = (event, cacheRequest) => {
+  event.respondWith(
+    caches.match(cacheRequest).then((response) => {
+      return (
+        response || fetch(event.request).then((response) => {
+          if(response.ok) {
+            return caches.open(currentCache)
+            .then((cache) => {
+              cache.put(event.request, response.clone());
+              return response;
             });
+          } else {
+            return response;
+          }
           })
           .catch(e => {
             return new Response(

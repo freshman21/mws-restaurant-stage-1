@@ -42,6 +42,7 @@ class DBHelper {
     })
     .then(response => {
       response.json().then(restaurants => {
+        console.log("fetch result JSON : ", restaurants);
         callback(null, restaurants);
       })
     })
