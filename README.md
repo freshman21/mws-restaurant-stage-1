@@ -27,7 +27,7 @@ This code is **Stage 1** and **Stage 2**, so far it has :
 1. 'gulp serve' on the code root folder
 
 
-2. As of **Stage 2** the restaurants json object is created on a separate server, the code is [here](https://github.com/tiago-m-dias/mws-restaurant-stage-2)
+2. As of **Stage 2** the restaurants json object is created on a separate server, the code for **Stage 2 Server** is [here](https://github.com/tiago-m-dias/mws-restaurant-stage-2) and the code for **Stage 3 Server** is [here](https://github.com/tiago-m-dias/mws-restaurant-stage-3)
 
 3. After downloading, to run the server use `node server` on the code folder. The object will be visible at : `http://localhost:1337/restaurants`
 
