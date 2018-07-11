@@ -186,6 +186,24 @@ const createRestaurantHTML = (restaurant) => {
   more.setAttribute('aria-label', restaurant.name + ' - View Details');
   li.append(more)
 
+  //Favorite button addition
+  const favContainer = document.createElement('div');
+  favContainer.className = 'icon-favorite';
+  const fav = document.createElement('button');
+
+  let favIcon;
+  if(restaurant["is_favorite"]) {
+    favIcon = "red";
+  } else {
+    favIcon = "blue";
+  }
+  fav.style.background = favIcon;
+  
+  favContainer.append(fav);
+  li.append(favContainer);
+
+
+
   return li
 };
 

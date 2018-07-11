@@ -73,6 +73,21 @@ class DBHelper {
   }
 
   /**
+   * Fetch restaurant reviews by restaurant ID.
+   */
+   static fetchRestaurantReviews(id, callback) {
+    const restaurantURL = DBHelper.DATABASE_URL + '/reviews/?restaurant_id=' + id;
+    fetch(restaurantURL, {
+      method: 'GET'
+    })
+    .then(response => {
+      response.json().then(response => {
+        callback(null, response);
+      })
+    }).catch(e => callback("Error : " + e, null));
+   }
+
+  /**
    * Fetch restaurants by a cuisine type with proper error handling.
    */
   static fetchRestaurantByCuisine(cuisine, callback) {
