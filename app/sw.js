@@ -1,12 +1,14 @@
 import idb from "idb";
 const currentCache = "sw-cacheV2";
 
-const dbPromise = idb.open("MWSrestaurant", 2, upgradeDB => {
+const dbPromise = idb.open("MWSrestaurant", 3, upgradeDB => {
   switch (upgradeDB.oldVersion) {
     case 0:
       upgradeDB.createObjectStore("restaurants", {keyPath: "id" });
     case 1:
       upgradeDB.createObjectStore("reviews", {keyPath: "id" });
+    case 2:
+      upgradeDB.createObjectStore("pending", {keyPath: "id", autoIncrement: true });
   }
 });
 

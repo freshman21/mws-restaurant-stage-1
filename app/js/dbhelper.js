@@ -1,3 +1,4 @@
+import idb from "idb";
 /**
  * Common database helper functions.
  */
@@ -229,4 +230,86 @@ class DBHelper {
     return marker;
   } */
 
+
+  static addPendingRequestToQueue(url, method, body) {
+    const dbPromise = idb.open("MWSrestaurant");
+    dbPromise.then(dataBase => {
+      const transact = dataBase.transaction("pending", "readwrite");
+      transact.objectStore("pending").put({ 
+        data: {
+          url,
+          method,
+          body }
+      })
+    }).catch(e => {
+      console.log("Error: " + e);
+    }).then(DBHelper.nextPending())
+  }
+
+  static nextPending() {
+    DBHelper.attemptCommitPending(DBHelper.nextPending);
+  }
+
+  static attemptCommitPending(callback) {
+    let url;
+    let body;
+    let method;
+
+    const dbPromise = idb.open("MWSrestaurant");
+    dbPromise.then(dataBase => {
+      const transact = dataBase.transaction("pending", "readwrite");
+      transact.objectStore("pending").openCursor()
+      .then(cursor => {
+        if(!cursor) {
+          console.log("returnning, nothing to see here!");
+          return;
+        }
+        const value = cursor.value;
+        url = cursor.value.data.url;
+        body = cursor.value.data.body;
+        method = cursor.value.data.method;
+
+        if(!url || !method) {
+          cursor.delete().then(callback());
+          console.log("...you will be...DELETED!!!! DELETE! DELETE! DELETE!");
+          return;
+        }
+
+        fetch(url, {
+          body: JSON.stringify(body),
+          method
+        }).then(response => { 
+          if (!response.ok && !response.redirected) { return; }
+        }).then(() => {
+          const delTransact = dataBase.transaction("pending", "readwrite");
+          delTransact.objectStore("pending").openCursor()
+          .then(cursor => {
+            cursor.delete()
+            .then(() => {
+              callback();
+            })
+          })
+        })
+      }).catch(e => {
+        console.log("Error: " + e);
+        return;
+      })
+    })
+  }
+
+  static updateCachedRestaurantData(id, updateObject) {
+
+  }
+
+  //Update favorite, rough sketch
+  static updateFav(id, state, callback){
+    console.log("Update favorites!");
+    const url = `${DBHelper.DATABASE_URL}/restaurants/${id}/?is_favorite=${state}`;
+    const method = "PUT";
+    DBHelper.addPendingRequestToQueue(url, method);
+
+    callback(null, {id, value: state});
+
+  }
 }
+window.DBHelper = DBHelper;

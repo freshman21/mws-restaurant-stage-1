@@ -203,6 +203,26 @@ nav h1 a {
   text-align: left;
   width: auto; }
 
+#restaurants-list li .restaurant-favorite {
+  position: relative;
+}
+
+#restaurants-list li .restaurant-favorite button {
+  max-width: 25px;
+  max-height: 25px;
+  width: 25px;
+  height: 25px;
+  position: absolute;
+  right: 0px;
+  top: 30px;
+  padding: 0;
+  margin: 0;
+  border: 0;
+  font-size: 14pt;
+  background-color: orange;
+  color: #fff;
+}
+
 #restaurants-list .restaurant-img {
   background-color: #ccc;
   display: block;

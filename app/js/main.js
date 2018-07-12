@@ -157,6 +157,30 @@ const fillRestaurantsHTML = (restaurants = self.restaurants) => {
 const createRestaurantHTML = (restaurant) => {
   const li = document.createElement('li');
 
+
+
+  //Favorite button addition
+  const favContainer = document.createElement('div');
+  favContainer.className = 'restaurant-favorite';
+  const fav = document.createElement('button');
+  fav.id = "favorite-button-" + restaurant.id;
+  fav.onclick = event => favClick(restaurant.id, !restaurant["is_favorite"]);
+
+  let favAlt;
+  let favText;
+  if(restaurant["is_favorite"]) {
+    favText = '★';
+    favAlt = 'Click to remove' + restaurant.name + ' from your favorites!';
+  } else {
+    favText = '☆';
+    favAlt = 'Click to add '+ restaurant.name +' to your favorites!';
+  }
+  fav.innerHTML = favText;
+  fav.setAttribute('aria-label', favAlt);
+
+  favContainer.append(fav);
+  li.append(favContainer);
+
   const image = document.createElement('img');
   image.className = 'restaurant-img';
   image.src = DBHelper.imageUrlForRestaurant(restaurant, 's');
@@ -186,26 +210,37 @@ const createRestaurantHTML = (restaurant) => {
   more.setAttribute('aria-label', restaurant.name + ' - View Details');
   li.append(more)
 
-  //Favorite button addition
-  const favContainer = document.createElement('div');
-  favContainer.className = 'icon-favorite';
-  const fav = document.createElement('button');
-
-  let favIcon;
-  if(restaurant["is_favorite"]) {
-    favIcon = "red";
-  } else {
-    favIcon = "blue";
-  }
-  fav.style.background = favIcon;
-  
-  favContainer.append(fav);
-  li.append(favContainer);
-
-
-
   return li
 };
+
+//favClick event
+const favClick = (id, state) => {
+  console.log("favorite clicked!");
+  const fav = document.getElementById("favorite-button-" + id);
+  fav.onclick = null;
+
+  DBHelper.updateFav(id, state, (e, resultObject) => {
+    if(e) { return; }
+
+    const favData = document.getElementById("favorite-button-" + resultObject.id);
+    let favText, favAlt;
+
+    if(resultObject.value == true) {
+      favText = '★';
+      favAlt = 'Click to remove' + restaurant.name + ' from your favorites!';
+    } else {
+      favText = '☆';
+      favAlt = 'Click to add '+ restaurant.name +' to your favorites!';
+    }
+    favData.innerHTML = favText;
+    favData.setAttribute('aria-label', favAlt);
+
+    const restaurant = self.restaurants.filter(r => r.id === resultObject.id[0]);
+    if(!restaurant) { return; }
+    restaurant["is_favorite"] = resultObject.value;
+    favData.onclick = event => favClick(restaurant.id, !restaurant["is_favorite"]);
+  })
+}
 
 /**
  * Add markers for current restaurants to the map.

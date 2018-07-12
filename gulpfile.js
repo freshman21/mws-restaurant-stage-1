@@ -30,12 +30,12 @@ gulp.task('styles', () => {
 });
 
 gulp.task('scripts', () => {
-  return gulp.src('app/scripts/**/*.js')
+  return gulp.src(['app/js/**/*.js', '!app/js/**/dbhelper.js'])
     .pipe($.plumber())
     .pipe($.if(dev, $.sourcemaps.init()))
     .pipe($.babel())
     .pipe($.if(dev, $.sourcemaps.write('.')))
-    .pipe(gulp.dest('.tmp/scripts'))
+    .pipe(gulp.dest('.tmp/js'))
     .pipe(reload({stream: true}));
 });
 
@@ -50,6 +50,18 @@ gulp.task("serviceWorkerGulp", () => {
   .pipe(sourceStream("sw.js"))
   .pipe(gulp.dest(".tmp/"));
 });
+
+
+//dbhelper babelifica-ti-oooon
+gulp.task("dbhelper", () => {
+  const babelDB = browserify({
+    debug: true
+  });
+  return babelDB.transform(babelify).require("app/js/dbhelper.js", {
+    entry: true
+  }).bundle().pipe(sourceStream("dbhelper.js")).pipe(gulp.dest(".tmp/js/"));
+});
+
 
 function lint(files) {
   return gulp.src(files)
@@ -68,7 +80,7 @@ gulp.task('lint:test', () => {
     .pipe(gulp.dest('test/spec'));
 });
 
-gulp.task('html', ['styles', 'scripts', 'serviceWorkerGulp'], () => {
+gulp.task('html', ['styles', 'scripts', 'dbhelper', 'serviceWorkerGulp'], () => {
   return gulp.src('app/*.html')
     .pipe($.useref({searchPath: ['.tmp', 'app', '.']}))
     .pipe($.if(/\.js$/, $.uglify({compress: {drop_console: true}})))
@@ -110,7 +122,7 @@ gulp.task('extras', () => {
 gulp.task('clean', del.bind(null, ['.tmp', 'dist']));
 
 gulp.task('serve', () => {
-  runSequence(['clean', 'wiredep'], ['styles', 'scripts', 'fonts', 'serviceWorkerGulp'], () => {
+  runSequence(['clean', 'wiredep'], ['styles', 'scripts', 'dbhelper', 'fonts', 'serviceWorkerGulp'], () => {
     browserSync.init({
       notify: false,
       port: 9000,
@@ -129,7 +141,7 @@ gulp.task('serve', () => {
     ]).on('change', reload);
 
     gulp.watch('app/css/**/*.css', ['styles']);
-    gulp.watch('app/js/**/*.js', ['scripts']);
+    gulp.watch('app/js/**/*.js', ['scripts', 'dbhelper']);
     gulp.watch('app/sw.js', ['serviceWorkerGulp']);
     gulp.watch('app/fonts/**/*', ['fonts']);
     gulp.watch('bower.json', ['wiredep', 'fonts']);
