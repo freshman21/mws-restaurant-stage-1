@@ -298,15 +298,45 @@ class DBHelper {
   }
 
   static updateCachedRestaurantData(id, updateObject) {
+    const dbPromise = idb.open("MWSrestaurant");
 
+    dbPromise.then(dataBase => {
+      const transact = dataBase.transaction("restaurants", "readwrite");
+      const value = transact.objectStore("restaurants").get("-1")
+      .then(value => {
+        if(!value) { return; }
+
+        const data = value.data;
+        const arrayRestaurant = data.filter(r => r.id == id);
+        const restaurantObj = arrayRestaurant[0];
+
+        if(!restaurantObj) { return; }
+
+        const keys = Object.keys(updateObject);
+        keys.forEach(key => {
+          restaurantObj[key] = updateObject[key];
+        })
+
+        dbPromise.then(dataBase => {
+          const transact = dataBase.transaction("restaurants", "readwrite");
+          transact.objectStore("restaurants").put({
+            id: "-1",
+            data: data
+          });
+          return transact.complete;
+        })
+      })
+    })
   }
 
   //Update favorite, rough sketch
   static updateFav(id, state, callback){
     console.log("Update favorites!");
     const url = `${DBHelper.DATABASE_URL}/restaurants/${id}/?is_favorite=${state}`;
+    console.log(url);
     const method = "PUT";
     DBHelper.addPendingRequestToQueue(url, method);
+    DBHelper.updateCachedRestaurantData(id, {"is_favorite": state});
 
     callback(null, {id, value: state});
 
