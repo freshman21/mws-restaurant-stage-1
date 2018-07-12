@@ -164,13 +164,13 @@ const createRestaurantHTML = (restaurant) => {
   favContainer.className = 'restaurant-favorite';
   const fav = document.createElement('button');
   fav.id = "favorite-button-" + restaurant.id;
-  fav.onclick = event => favClick(restaurant.id, !restaurant["is_favorite"]);
+  fav.onclick = event => favClick(restaurant.id, !restaurant["is_favorite"], restaurant.name);
 
   let favAlt;
   let favText;
   if(restaurant["is_favorite"]) {
     favText = '★';
-    favAlt = 'Click to remove' + restaurant.name + ' from your favorites!';
+    favAlt = 'Click to remove ' + restaurant.name + ' from your favorites!';
   } else {
     favText = '☆';
     favAlt = 'Click to add '+ restaurant.name +' to your favorites!';
@@ -214,8 +214,7 @@ const createRestaurantHTML = (restaurant) => {
 };
 
 //favClick event
-const favClick = (id, state) => {
-  console.log("favorite clicked! TAMOSAKI!");
+const favClick = (id, state, name) => {
   const fav = document.getElementById("favorite-button-" + id);
   fav.onclick = null;
 
@@ -225,12 +224,14 @@ const favClick = (id, state) => {
     const favData = document.getElementById("favorite-button-" + resultObject.id);
     let favText, favAlt;
 
+    console.log(resultObject);
+
     if(resultObject.value == true) {
       favText = '★';
-      favAlt = 'Click to remove' + resultObject.name + ' from your favorites!';
+      favAlt = 'Click to remove ' + name + ' from your favorites!';
     } else {
       favText = '☆';
-      favAlt = 'Click to add '+ resultObject.name +' to your favorites!';
+      favAlt = 'Click to add '+ name +' to your favorites!';
     }
     favData.innerHTML = favText;
     favData.setAttribute('aria-label', favAlt);
