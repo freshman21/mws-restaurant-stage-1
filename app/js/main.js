@@ -163,20 +163,24 @@ const createRestaurantHTML = (restaurant) => {
   const fav = document.createElement('button');
   fav.id = "favorite-button-" + restaurant.id;
 
-  const favStatus = restaurant["is_favorite"];
+  let favStatus;
+  let favAlt;
+  let favText;
+  if(restaurant["is_favorite"] == 'true') {
+    favStatus = true;
+    favText = '★';
+    favAlt = 'Click to remove ' + restaurant.name + ' from your favorites!' + favStatus + !favStatus;
+  } else {
+    favStatus = false;
+    favText = '☆';
+    favAlt = 'Click to add '+ restaurant.name +' to your favorites!' + favStatus + !favStatus;
+  }
+
   //console.log("favStatus for " + restaurant.name + " is : " + favStatus);
   console.log("creating onclick for " + restaurant.name + `width id: ${restaurant.id} and status: ${favStatus}`);
   fav.onclick = event => favClick(restaurant.id, !favStatus, restaurant.name);
 
-  let favAlt;
-  let favText;
-  if(favStatus == 'true') {
-    favText = '★';
-    favAlt = 'Click to remove ' + restaurant.name + ' from your favorites!';
-  } else {
-    favText = '☆';
-    favAlt = 'Click to add '+ restaurant.name +' to your favorites!';
-  }
+
   fav.innerHTML = favText;
   fav.setAttribute('aria-label', favAlt);
 
@@ -248,7 +252,7 @@ const favClick = (id, state, name) => {
     const restaurant = self.restaurants.filter(r => r.id === resultObject.id[0]);
     if(!restaurant) { return; }
     restaurant["is_favorite"] = resultObject.value;
-    favData.onclick = event => favClick(restaurant.id, !restaurant["is_favorite"], name);
+    favData.onclick = event => favClick(id, !state, name);
   })
 }
 
