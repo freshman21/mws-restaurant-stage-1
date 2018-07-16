@@ -83,6 +83,7 @@ class DBHelper {
     })
     .then(response => {
       response.json().then(response => {
+        console.log("reviews response : ", response);
         callback(null, response);
       })
     }).catch(e => callback("Error : " + e, null));
@@ -261,7 +262,7 @@ class DBHelper {
       transact.objectStore("pending").openCursor()
       .then(cursor => {
         if(!cursor) {
-          console.log("returnning, nothing to see here!");
+          console.log("returning, nothing to see here!");
           return;
         }
         const value = cursor.value;
@@ -269,12 +270,13 @@ class DBHelper {
         body = cursor.value.data.body;
         method = cursor.value.data.method;
 
-        if(!url || !method) {
+        if(!url || !method || (method === "POST" && !body)) {
           cursor.delete().then(callback());
           console.log("...you will be...DELETED!!!! DELETE! DELETE! DELETE!");
           return;
         }
 
+        console.log("fetch update");
         fetch(url, {
           body: JSON.stringify(body),
           method

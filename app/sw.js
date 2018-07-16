@@ -1,5 +1,5 @@
 import idb from "idb";
-const currentCache = "sw-cacheV2";
+const currentCache = "sw-cacheV3";
 
 const dbPromise = idb.open("MWSrestaurant", 3, upgradeDB => {
   switch (upgradeDB.oldVersion) {
@@ -65,13 +65,13 @@ self.addEventListener("fetch", event => {
 // handleAJAXEvent || handleNonAJAXEvent based on Doug Brown Webinar
 
 const handleAJAXEvent = (event, id) => {
-  if(event.request != "GET") {
-    return fetch(event.request).then(response => response.json())
-    .then(json => {
-      console.log("HANDLE AJAX EVENT RETURN : " +json);
-      return json;
-    })
-  }
+  // if(event.request != "GET") {
+  //   return fetch(event.request).then(response => response.json())
+  //   .then(json => {
+  //     console.log("HANDLE AJAX EVENT RETURN : " +json);
+  //     return json;
+  //   })
+  // }
 
   event.respondWith(
     dbPromise.then(dataBase => {
@@ -83,7 +83,11 @@ const handleAJAXEvent = (event, id) => {
         .then(json => {
           return dbPromise.then(dataBase => {
             let transact = dataBase.transaction("restaurants", "readwrite");
-            transact.objectStore("restaurants").put({ id: id, data: json });
+            transact.objectStore("restaurants")
+            .put({
+              id: id,
+              data: json
+            });
             return json;
           });
         })
