@@ -244,7 +244,7 @@ class DBHelper {
       })
     }).catch(e => {
       console.log("Error: " + e);
-    }).then(DBHelper.nextPending())
+    }).then(DBHelper.nextPending());
   }
 
   static nextPending() {
@@ -337,8 +337,8 @@ class DBHelper {
     const url = `${DBHelper.DATABASE_URL}/restaurants/${id}/?is_favorite=${state}`;
     console.log(url);
     const method = "PUT";
-    DBHelper.addPendingRequestToQueue(url, method);
     DBHelper.updateCachedRestaurantData(id, {"is_favorite": state});
+    DBHelper.addPendingRequestToQueue(url, method);
 
     callback(null, {id, value: state});
 

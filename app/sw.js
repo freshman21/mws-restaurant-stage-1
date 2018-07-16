@@ -8,7 +8,10 @@ const dbPromise = idb.open("MWSrestaurant", 3, upgradeDB => {
     case 1:
       upgradeDB.createObjectStore("reviews", {keyPath: "id" });
     case 2:
-      upgradeDB.createObjectStore("pending", {keyPath: "id", autoIncrement: true });
+      upgradeDB.createObjectStore("pending", {
+        keyPath: "id",
+        autoIncrement: true
+      });
   }
 });
 
@@ -65,13 +68,13 @@ self.addEventListener("fetch", event => {
 // handleAJAXEvent || handleNonAJAXEvent based on Doug Brown Webinar
 
 const handleAJAXEvent = (event, id) => {
-  // if(event.request != "GET") {
-  //   return fetch(event.request).then(response => response.json())
-  //   .then(json => {
-  //     console.log("HANDLE AJAX EVENT RETURN : " +json);
-  //     return json;
-  //   })
-  // }
+  if(event.request.method !== "GET") {
+    return fetch(event.request).then(response => response.json())
+    .then(json => {
+      console.log("HANDLE AJAX EVENT RETURN : " +json);
+      return json;
+    });
+  }
 
   event.respondWith(
     dbPromise.then(dataBase => {
