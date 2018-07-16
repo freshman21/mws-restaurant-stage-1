@@ -88,6 +88,7 @@ const fillCuisinesHTML = (cuisines = self.cuisines) => {
    }).addTo(newMap);
 
    updateRestaurants();
+   DBHelper.nextPending();
  };
 // window.initMap = () => {
 //   let loc = {
@@ -166,7 +167,7 @@ const createRestaurantHTML = (restaurant) => {
   let favStatus;
   let favAlt;
   let favText;
-  if(restaurant["is_favorite"] == 'true') {
+  if(restaurant["is_favorite"].toString() == 'true') {
     favStatus = true;
     favText = '★';
     favAlt = 'Click to remove ' + restaurant.name + ' from your favorites!' + favStatus + !favStatus;
@@ -226,34 +227,40 @@ const favClick = (id, state, name) => {
 
   console.log("id being clicked is : " + id);
 
-  DBHelper.updateFav(id, state, (e, resultObject) => {
-    if(e) { return; }
+  const restaurant = self.restaurants.filter(r => r.id === id)[0];
+  if(!restaurant) { return; }
+  restaurant["is_favorite"] = state;
+  fav.onclick = event => favClick(restaurant.id, !restaurant["is_favorite"], restaurant.name);
+  DBHelper.favClick(id, state, restaurant.name);
 
-    const favData = document.getElementById("favorite-button-" + resultObject.id);
-    let favText;
-    let favAlt;
+  // DBHelper.updateFav(id, state, (e, resultObject) => {
+  //   if(e) { return; }
 
-    console.log("id being clicked in DBHelper is : " + id);
+  //   const favData = document.getElementById("favorite-button-" + resultObject.id);
+  //   let favText;
+  //   let favAlt;
 
-    console.log(resultObject);
-    console.log("and the resultObject status is : " + resultObject.value);
+  //   console.log("id being clicked in DBHelper is : " + id);
 
-    if(resultObject.value == true) {
-      favText = '★';
-      favAlt = 'Click to remove ' + name + ' from your favorites!';
-    } else {
-      favText = '☆';
-      favAlt = 'Click to add '+ name +' to your favorites!';
-    }
-    console.log("after clicking, favtext should be : " + favText + " and status : " + resultObject.value);
-    favData.innerHTML = favText;
-    favData.setAttribute('aria-label', favAlt);
+  //   console.log(resultObject);
+  //   console.log("and the resultObject status is : " + resultObject.value);
 
-    const restaurant = self.restaurants.filter(r => r.id === resultObject.id[0]);
-    if(!restaurant) { return; }
-    restaurant["is_favorite"] = resultObject.value;
-    favData.onclick = event => favClick(id, !state, name);
-  })
+  //   if(resultObject.value == true) {
+  //     favText = '★';
+  //     favAlt = 'Click to remove ' + name + ' from your favorites!';
+  //   } else {
+  //     favText = '☆';
+  //     favAlt = 'Click to add '+ name +' to your favorites!';
+  //   }
+  //   console.log("after clicking, favtext should be : " + favText + " and status : " + resultObject.value);
+  //   favData.innerHTML = favText;
+  //   favData.setAttribute('aria-label', favAlt);
+
+  //   const restaurant = self.restaurants.filter(r => r.id === resultObject.id[0]);
+  //   if(!restaurant) { return; }
+  //   restaurant["is_favorite"] = resultObject.value;
+  //   favData.onclick = event => favClick(id, !state, name);
+  // })
 }
 
 /**

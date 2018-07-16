@@ -33,6 +33,7 @@ var newMap;
        DBHelper.mapMarkerForRestaurant(self.restaurant, self.newMap);
      }
    });
+   DBHelper.nextPending();
  }
 // window.initMap = () => {
 //   fetchRestaurantFromURL((error, restaurant) => {
@@ -84,6 +85,35 @@ const fillRestaurantHTML = (restaurant = self.restaurant) => {
 
   const address = document.getElementById('restaurant-address');
   address.innerHTML = restaurant.address;
+
+
+  const imageContainer = document.getElementById('restaurant-img-container');
+
+  const fav = document.createElement('button');
+  fav.id = "favorite-button-" + restaurant.id;
+
+  let favStatus;
+  let favAlt;
+  let favText;
+  if(restaurant["is_favorite"].toString() == 'true') {
+    favStatus = true;
+    favText = '★';
+    favAlt = 'Click to remove ' + restaurant.name + ' from your favorites!' + favStatus + !favStatus;
+  } else {
+    favStatus = false;
+    favText = '☆';
+    favAlt = 'Click to add '+ restaurant.name +' to your favorites!' + favStatus + !favStatus;
+  }
+
+  //console.log("favStatus for " + restaurant.name + " is : " + favStatus);
+  console.log("creating onclick for " + restaurant.name + `width id: ${restaurant.id} and status: ${favStatus}`);
+  fav.onclick = event => favClick(restaurant.id, !favStatus, restaurant.name);
+
+
+  fav.innerHTML = favText;
+  fav.setAttribute('aria-label', favAlt);
+
+  imageContainer.append(fav);
 
   const image = document.getElementById('restaurant-img');
   image.className = 'restaurant-img';
@@ -202,4 +232,12 @@ const getParameterByName = (name, url) => {
   if (!results[2])
     return '';
   return decodeURIComponent(results[2].replace(/\+/g, ' '));
+}
+
+
+const favClick = (id, state, name) => {
+  const fav = document.getElementById("favorite-button-" + id);
+  self.restaurant["is_favorite"] = state;
+  fav.onclick = event => favClick(restaurant.id, !self.restaurant["is_favorite"], restaurant.name);
+  DBHelper.favClick(id, state, restaurant.name);
 }

@@ -329,6 +329,30 @@ class DBHelper {
         })
       })
     })
+
+    dbPromise.then(dataBase => {
+      const transaction = dataBase.transaction("restaurants", "readwrite");
+      const value = transact.objectStore("restaurants").get(id + "")
+      .then(value => {
+        if (!value) { return; }
+
+        const restaurantObj = value.data;
+        if (!restaurantObj) { return; }
+        const keys = Object.keys(updateObject);
+        keys.forEach(k => {
+          restaurantObj[k] = updateObj[k];
+        })
+
+        dbPromise.then(dataBase => {
+          const transact = dataBase.transaction("restaurants", "readwrite");
+          transact.objectStore("restaurants").put({
+            id: id + "",
+            data: restaurantObj
+          });
+          return transact.complete;
+        })
+      })
+    })
   }
 
   //Update favorite, rough sketch
@@ -342,6 +366,33 @@ class DBHelper {
 
     callback(null, {id, value: state});
 
+  }
+
+
+  static favClick(id, state, name) {
+    const fav = document.getElementById("favorite-button-" + id);
+    //prevent double click
+    fav.onclick = null;
+
+    DBHelper.updateFav(id, state, (e, resultObject) => {
+      if(e) { return; }
+
+      const favorite = document.getElementById("favorite-button-" + id);
+      let favText;
+      let favAlt;
+
+      if(resultObject.value == true) {
+        favText = '★';
+        favAlt = 'Click to remove ' + name + ' from your favorites!';
+      } else {
+        favText = '☆';
+        favAlt = 'Click to add '+ name +' to your favorites!';
+      }
+      console.log("after clicking, favtext should be : " + favText + " and status : " + resultObject.value);
+      favorite.innerHTML = favText;
+      favorite.setAttribute('aria-label', favAlt);
+
+    });
   }
 }
 window.DBHelper = DBHelper;
