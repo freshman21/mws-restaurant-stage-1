@@ -163,9 +163,20 @@ const fillReviewsHTML = (e, reviews = self.restaurant.reviews) => {
 
   if(e) console.log("Error : " + e);
   const container = document.getElementById('reviews-container');
+  const flex = document.createElement("div");
+  flex.id = "reviews-heading";
+  container.appendChild(flex);
+
   const title = document.createElement('h3');
   title.innerHTML = 'Reviews';
-  container.appendChild(title);
+  flex.appendChild(title);
+  //container.appendChild(title);
+
+  const addReviewLink = document.createElement("a");
+  addReviewLink.href = "#review-form";
+  addReviewLink.setAttribute('aria-label', "Click to add a review");
+  addReviewLink.innerHTML = "Add Review";
+  flex.appendChild(addReviewLink);
 
   if (!reviews) {
     const noReviews = document.createElement('p');
@@ -241,3 +252,22 @@ const favClick = (id, state, name) => {
   fav.onclick = event => favClick(restaurant.id, !self.restaurant["is_favorite"], restaurant.name);
   DBHelper.favClick(id, state, restaurant.name);
 }
+
+const saveReview = () => {
+  // Get the data points for the review
+  const name = document.getElementById("review-name").value;
+  const rating = document.getElementById("review-rating").value;
+  const comment = document.getElementById("review-comment").value;
+  console.log("restaurant_info review-name: ", name);
+  DBHelper.saveReview(self.restaurant.id, name, rating, comment, (error, review) => {
+    if (error) {
+      console.log("Error saving review")
+    }
+    console.log("yea-yuhhhh! SAVED THE REVIEW! I SHOWED HIM! HM HM HM!");
+    const btn = document.getElementById("button-save-review");
+    btn.onclick = event => saveReview();
+    window.location = "/restaurant.html?id=" + self.restaurant.id;
+  });
+}
+
+

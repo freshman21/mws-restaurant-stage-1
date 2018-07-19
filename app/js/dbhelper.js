@@ -1,4 +1,26 @@
 import idb from "idb";
+
+const dbPromise = idb.open("MWSrestaurant", 3, upgradeDB => {
+  switch (upgradeDB.oldVersion) {
+    case 0:
+      upgradeDB.createObjectStore("restaurants", {
+        keyPath: "id"
+      });
+    case 1:
+      {
+        const reviewsStore = upgradeDB.createObjectStore("reviews", {
+          keyPath: "id"
+        });
+        reviewsStore.createIndex("restaurant_id", "restaurant_id");
+      }
+    case 2:
+      upgradeDB.createObjectStore("pending", {
+        keyPath: "id",
+        autoIncrement: true
+      });
+  }
+});
+
 /**
  * Common database helper functions.
  */
@@ -33,21 +55,17 @@ class DBHelper {
     // xhr.send();
 
     let restaurantsURL = DBHelper.DATABASE_URL + `/restaurants`
-
-    if(id) {
+    if (id)  {
       restaurantsURL += `/${id}`;
     }
-
     fetch(restaurantsURL, {
       method: `GET`
-    })
-    .then(response => {
+    }).then(response => {
       response.json().then(restaurants => {
         console.log("fetch result JSON : ", restaurants);
         callback(null, restaurants);
       })
-    })
-    .catch(e => {
+    }).catch(e => {
       callback(`Request failed, no cake for you! Error : ${e}`, null);
     })
 
@@ -256,8 +274,13 @@ class DBHelper {
     let body;
     let method;
 
-    const dbPromise = idb.open("MWSrestaurant");
+    //const dbPromise = idb.open("MWSrestaurant");
     dbPromise.then(dataBase => {
+      if (!dataBase.objectStoreNames.length) {
+        console.log("dataBase not available");
+        dataBase.close();
+        return;
+      }
       const transact = dataBase.transaction("pending", "readwrite");
       transact.objectStore("pending").openCursor()
       .then(cursor => {
@@ -279,7 +302,7 @@ class DBHelper {
         console.log("fetch update");
         fetch(url, {
           body: JSON.stringify(body),
-          method
+          method: method
         }).then(response => { 
           if (!response.ok && !response.redirected) { return; }
         }).then(() => {
@@ -331,7 +354,7 @@ class DBHelper {
     })
 
     dbPromise.then(dataBase => {
-      const transaction = dataBase.transaction("restaurants", "readwrite");
+      const transact = dataBase.transaction("restaurants", "readwrite");
       const value = transact.objectStore("restaurants").get(id + "")
       .then(value => {
         if (!value) { return; }
@@ -340,7 +363,7 @@ class DBHelper {
         if (!restaurantObj) { return; }
         const keys = Object.keys(updateObject);
         keys.forEach(k => {
-          restaurantObj[k] = updateObj[k];
+          restaurantObj[k] = updateObject[k];
         })
 
         dbPromise.then(dataBase => {
@@ -368,6 +391,45 @@ class DBHelper {
 
   }
 
+  static updateCachedRestaurantReview(id, bodyObject) {
+    dbPromise.then(dataBase => {
+      const transact = dataBase.transaction("reviews", "readwrite");
+      const store = transact.objectStore("reviews");
+      store.put({
+        id: Date.now(),
+        "restaurant_id": id,
+        data: bodyObject
+      });
+      return transact.complete;
+    })
+  }
+
+  static saveNewReview(id, bodyObject, callback) {
+    const url = `${DBHelper.DATABASE_URL}/reviews`;
+    const method = "POST";
+    DBHelper.updateCachedRestaurantReview(id, bodyObject);
+    DBHelper.addPendingRequestToQueue(url, method, bodyObject);
+    callback(null, null);
+  }
+
+  static saveReview(id, name, rating, comment, callback) {
+    const btn = document.getElementById("button-save-review");
+    btn.onclick = null;
+    const body = {
+      restaurant_id: id,
+      name: name,
+      rating: rating,
+      comments: comment
+    }
+    DBHelper.saveNewReview(id, body, (error, result) => {
+      if (error) {
+        callback(error, null);
+      }
+      const btn = document.getElementById("button-save-review");
+      btn.onclick = event => saveReview();
+      window.location = "/restaurant.html?id=" + id;
+    })
+  }
 
   static favClick(id, state, name) {
     const fav = document.getElementById("favorite-button-" + id);
