@@ -106,7 +106,7 @@ const fillRestaurantHTML = (restaurant = self.restaurant) => {
   }
 
   //console.log("favStatus for " + restaurant.name + " is : " + favStatus);
-  console.log("creating onclick for " + restaurant.name + `width id: ${restaurant.id} and status: ${favStatus}`);
+  //console.log("creating onclick for " + restaurant.name + `width id: ${restaurant.id} and status: ${favStatus}`);
   fav.onclick = event => favClick(restaurant.id, !favStatus, restaurant.name);
 
 
@@ -208,7 +208,7 @@ const createReviewHTML = (review) => {
 
   const rating = document.createElement('p');
   rating.innerHTML = `Rating: ${review.rating}`;
-  rating.className = 'reviews-rating';
+  rating.className = 'reviews-rating reviews-rate' + review.rating;
   li.appendChild(rating);
 
   const comments = document.createElement('p');
@@ -258,15 +258,11 @@ const saveReview = () => {
   const name = document.getElementById("review-name").value;
   const rating = document.getElementById("review-rating").value;
   const comment = document.getElementById("review-comment").value;
-  console.log("restaurant_info review-name: ", name);
+  //console.log("restaurant_info review-name: ", name);
   DBHelper.saveReview(self.restaurant.id, name, rating, comment, (error, review) => {
     if (error) {
       console.log("Error saving review")
     }
-    console.log("yea-yuhhhh! SAVED THE REVIEW! I SHOWED HIM! HM HM HM!");
-    const btn = document.getElementById("button-save-review");
-    btn.onclick = event => saveReview();
-    window.location = "/restaurant.html?id=" + self.restaurant.id;
   });
 }
 

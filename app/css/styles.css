@@ -341,7 +341,7 @@ nav h1 a {
 #reviews-container {
   border-bottom: 1px solid #d9d9d9;
   border-top: 1px solid #fff;
-  padding: 40px 40px 90px;
+  padding: 40px;
   width: calc(100% - 80px); }
 
 #reviews-container h3 {
@@ -399,6 +399,16 @@ nav h1 a {
   width: 70px;
   margin: 10px 0 0 20px; }
 
+#reviews-list .reviews-rate1, #reviews-list .reviews-rate2 {
+  background-color: red;
+}
+#reviews-list .reviews-rate3 {
+  background-color: orange;
+}
+#reviews-list .reviews-rate4, #reviews-list .reviews-rate5 {
+  background-color: green;
+}
+
 #restaurant-hours {
   display: inline-table;
   text-align: left;
@@ -409,61 +419,6 @@ nav h1 a {
   vertical-align: top;
   width: 50%; }
 
-
-#review-entry {
-  margin-left: auto;
-  margin-right: auto;
-  position: relative;
-  max-width: 800px;
-  width: 100%;
-  padding-bottom: 65px;
-}
-#review-entry label span {
-  display: block;
-  font-size: 14px;
-  margin-left: 10px;
-  margin-right: 10px;
-}
-#review-entry label input {
-  width: calc(100% - 20px);
-  box-sizing: border-box;
-  font-size: 18px;
-  padding: 5px;
-  margin-left: 10px;
-  margin-right: 10px;
-}
-#review-entry label select {
-  font-size: 18px;
-  margin-left: 10px;
-  margin-right: 10px;
-}
-#review-entry label textarea {
-  width: calc(100% - 20px);
-  box-sizing: border-box;
-  font-size: 18px;
-  padding: 5px;
-  margin-left: 10px;
-  margin-right: 10px;
-}
-#review-entry div {
-  margin-bottom: 15px;
-}
-#review-entry button {
-  background-color: #a85900;
-  border-bottom: 3px solid #eee;
-  color: #f0f0f0;
-  display: inline-block;
-  font-size: 14px;
-  margin: 15px 0 0;
-  padding: 8px 30px 10px;
-  text-align: center;
-  text-decoration: none;
-  text-transform: uppercase;
-  cursor: pointer;
-  position: absolute;
-  bottom: 10px;
-  right: 10px;
-}
 #reviews-heading {
   display: flex;
   flex-wrap: wrap;
@@ -475,7 +430,62 @@ nav h1 a {
   color: #333;
   text-decoration-line: underline;
   font-size: 14px;
-} 
+}
+
+#reviews-form {
+  border-bottom: 1px solid #d9d9d9;
+  border-top: 1px solid #fff;
+  padding: 40px 40px 90px;
+  width: calc(100% - 80px); }
+
+ #reviews-form h3 {
+  color: #f58500;
+  font-size: 24pt;
+  font-weight: 300;
+  letter-spacing: -1px;
+  padding-bottom: 1pt; }
+
+#reviews-form select {
+  background-color: white;
+  border: 1px solid #000;
+  font-family: Arial,sans-serif;
+  font-size: 11pt;
+  height: 35px;
+  letter-spacing: 0;
+  padding: 0 10px; }
+
+#reviews-form select:hover, #reviews-form select:focus {
+  outline: 0;
+  -webkit-box-shadow: 0 0 8px 3px #a40404;
+  box-shadow: 0 0 8px 3px #a40404;
+}
+
+#reviews-form input, #reviews-form textarea {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 10pt;
+  color: #333;
+  line-height: 1.5;
+  padding: 0 5px;
+  border: 1px solid #000;
+}
+
+#reviews-form button {
+  max-height: 30px;
+  height: 30px;
+  padding: 0 10px;
+  margin: 15px 0;
+  border: 0;
+  font-size: 10pt;
+  background-color: orange;
+  color: #fff;
+  text-transform: uppercase;
+}
+.review-form-title {
+  text-transform: uppercase;
+  font-weight: bold;
+  margin: 5px 0;
+}
+
 
 /* ====================== 6. Media Queries / Breakpoints ====================== */
 /* ====================== 6.0 Mobile Adjustment ====================== */

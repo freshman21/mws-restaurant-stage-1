@@ -1,6 +1,5 @@
 import idb from "idb";
 const currentCache = "sw-cacheV3";
-let dbReady = false;
 
 const dbPromise = idb.open("MWSrestaurant", 3, upgradeDB => {
   switch (upgradeDB.oldVersion) {
@@ -68,9 +67,9 @@ self.addEventListener("fetch", event => {
       if (checkForUrl.pathname.indexOf("restaurants")) {
         id = parts[parts.length - 1] === "restaurants" ? "-1" : parts[parts.length - 1];
       } else {
-        console.log("checkForUrl: ", checkForUrl);
+        //console.log("checkForUrl: ", checkForUrl);
         id = checkForUrl.searchParams.get("restaurant_id");
-        console.log("restaurant id: ", id);
+        //console.log("restaurant id: ", id);
       }
     }
     handleAJAXEvent(event, id);
@@ -82,32 +81,30 @@ self.addEventListener("fetch", event => {
 // handleAJAXEvent || handleNonAJAXEvent based on Doug Brown Webinar
 
 const handleAJAXEvent = (event, id) => {
-  console.log("handle ajax event -- id = ", id);
+  //console.log("handle ajax event -- id = ", id);
   // Only use caching for GET events
-  console.log("Event request: ", event.request.method);
+  //console.log("Event request: ", event.request.method);
   if (event.request.method !== "GET") {
     console.log("Not a GET request: ", event.request.method);
     return fetch(event.request).then(response => response.json()).then(json => {
-      console.log("HANDLE AJAX EVENT RETURN : " + json);
+      //console.log("HANDLE AJAX EVENT RETURN : " + json);
       return json
     });
   }
   // Split these request for handling restaurants vs reviews
   if (event.request.url.indexOf("reviews") > -1) {
-    console.log("reviews event id = " + id);
+    //console.log("reviews event id = " + id);
     handleReviewsEvent(event, id);
   } else {
     handleRestaurantEvent(event, id);
   }
 }
 const handleReviewsEvent = (event, id) => {
-  console.log("reviews event id = " + {
-    id: id
-  });
+  //console.log("reviews event id = " + { id: id });
   event.respondWith(dbPromise.then(dataBase => {
     return dataBase.transaction("reviews").objectStore("reviews").index("restaurant_id").getAll(id);
   }).then(data => {
-    console.log("idb data for reviews: ", data);
+    //console.log("idb data for reviews: ", data);
     return (data.length && data) || fetch(event.request).then(response => response.json()).then(data => {
       return dbPromise.then(idb => {
         const iDBtx = idb.transaction("reviews", "readwrite");
@@ -124,9 +121,8 @@ const handleReviewsEvent = (event, id) => {
     })
   }).then(finalResponse => {
     if (finalResponse[0].data) {
-      console.log("tranforming finalResponse");
       const mapResponse = finalResponse.map(review => review.data);
-      console.log("review finalResponse: ", mapResponse);
+      //console.log("review finalResponse: ", mapResponse);
       return new Response(JSON.stringify(mapResponse));
     }
     return new Response(JSON.stringify(finalResponse));
@@ -137,7 +133,6 @@ const handleReviewsEvent = (event, id) => {
   }))
 }
 const handleRestaurantEvent = (event, id) => {
-  console.log("handle restaurant event");
   event.respondWith(dbPromise.then(dataBase => {
     return dataBase.transaction("restaurants").objectStore("restaurants").get(id);
   }).then(data => {

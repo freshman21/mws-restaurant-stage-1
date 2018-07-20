@@ -178,7 +178,7 @@ const createRestaurantHTML = (restaurant) => {
   }
 
   //console.log("favStatus for " + restaurant.name + " is : " + favStatus);
-  console.log("creating onclick for " + restaurant.name + `width id: ${restaurant.id} and status: ${favStatus}`);
+  //console.log("creating onclick for " + restaurant.name + `width id: ${restaurant.id} and status: ${favStatus}`);
   fav.onclick = event => favClick(restaurant.id, !favStatus, restaurant.name);
 
 
@@ -225,7 +225,7 @@ const favClick = (id, state, name) => {
   const fav = document.getElementById("favorite-button-" + id);
   //fav.onclick = null;
 
-  console.log("id being clicked is : " + id);
+  //console.log("id being clicked is : " + id);
 
   const restaurant = self.restaurants.filter(r => r.id === id)[0];
   if(!restaurant) { return; }

@@ -62,7 +62,7 @@ class DBHelper {
       method: `GET`
     }).then(response => {
       response.json().then(restaurants => {
-        console.log("fetch result JSON : ", restaurants);
+        //console.log("fetch result JSON : ", restaurants);
         callback(null, restaurants);
       })
     }).catch(e => {
@@ -101,7 +101,7 @@ class DBHelper {
     })
     .then(response => {
       response.json().then(response => {
-        console.log("reviews response : ", response);
+        //console.log("reviews response : ", response);
         callback(null, response);
       })
     }).catch(e => callback("Error : " + e, null));
@@ -309,8 +309,8 @@ class DBHelper {
           const delTransact = dataBase.transaction("pending", "readwrite");
           delTransact.objectStore("pending").openCursor()
           .then(cursor => {
-            cursor.delete()
-            .then(() => {
+            cursor.delete().then(() => {
+              console.log("...you will be...DELETED!!!! DELETE! DELETE! DELETE!");
               callback();
             })
           })
@@ -382,7 +382,7 @@ class DBHelper {
   static updateFav(id, state, callback){
     console.log("Update favorites!");
     const url = `${DBHelper.DATABASE_URL}/restaurants/${id}/?is_favorite=${state}`;
-    console.log(url);
+    //console.log(url);
     const method = "PUT";
     DBHelper.updateCachedRestaurantData(id, {"is_favorite": state});
     DBHelper.addPendingRequestToQueue(url, method);
@@ -450,7 +450,7 @@ class DBHelper {
         favText = '☆';
         favAlt = 'Click to add '+ name +' to your favorites!';
       }
-      console.log("after clicking, favtext should be : " + favText + " and status : " + resultObject.value);
+      //console.log("after clicking, favtext should be : " + favText + " and status : " + resultObject.value);
       favorite.innerHTML = favText;
       favorite.setAttribute('aria-label', favAlt);
 
