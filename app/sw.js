@@ -158,19 +158,30 @@ const handleRestaurantEvent = (event, id) => {
 
 
 const handleNonAJAXEvent = (event, cacheRequest) => {
-  event.respondWith(caches.match(cacheRequest).then(response => {
-    return (response || fetch(event.request).then(response => {
-      return caches.open(currentCache).then(cache => {
-        if (response.url.indexOf("browser-sync") === -1) {
-          cache.put(event.request, response.clone());
-        }
-        return response;
-      });
-    }).catch(e => {
-      return new Response("Connect to a Wi-Fi or Mobile network to get more meat on your bone phone 🍖", {
-        status: 404,
-        statusText: "Connect to a Wi-Fi or Mobile network to get more meat on your bone phone 🍖 : " + e.message
-      });
-    }));
-  }));
+  event.respondWith(
+    caches.match(cacheRequest).then((response) => {
+      return (
+        response || fetch(event.request).then((response) => {
+          if(response.ok) {
+            return caches.open(currentCache)
+            .then((cache) => {
+              cache.put(event.request, response.clone());
+              return response;
+            });
+          } else {
+            return response;
+          }
+          })
+          .catch(e => {
+            return new Response(
+              'Connect to a Wi-Fi or Mobile network to get more meat on your bone phone 🍖',
+              {
+                status: 404,
+                statusText: e.message
+              }
+            );
+          })
+      );
+    })
+  );
 };
