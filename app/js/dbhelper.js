@@ -1,3 +1,12 @@
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js', { scope: '/' })
+  .then((reg) => {
+    console.log('YEA-YUH! ServiceWorker Registration successful! Scope is ' + reg.scope);
+  }).catch((e) => {
+    console.log('ServiceWorker Registration failed with ' + e);
+  });
+}
+
 import idb from "idb";
 
 const dbPromise = idb.open("MWSrestaurant", 3, upgradeDB => {
@@ -20,6 +29,8 @@ const dbPromise = idb.open("MWSrestaurant", 3, upgradeDB => {
       });
   }
 });
+
+
 
 /**
  * Common database helper functions.

@@ -190,7 +190,7 @@ const createRestaurantHTML = (restaurant) => {
 
   const image = document.createElement('img');
   image.className = 'restaurant-img';
-  image.src = DBHelper.imageUrlForRestaurant(restaurant, 's');
+  image.dataset.src = DBHelper.imageUrlForRestaurant(restaurant, 's');
   image.srcset = DBHelper.imageUrlForRestaurant(restaurant, 's') + ' 369w, '
   + DBHelper.imageUrlForRestaurant(restaurant, 'm') + ' 424w, '
   + DBHelper.imageUrlForRestaurant(restaurant, 'l') + ' 821w, '
@@ -288,3 +288,26 @@ const favClick = (id, state, name) => {
 //     self.markers.push(marker);
 //   });
 // }
+
+
+//Interaction observer to lazyload images
+let options = {
+  root: null, // relative to document viewport 
+  rootMargin: '0px', // margin around root. Values are similar to css property. Unitless values not allowed
+  threshold: 1.0 // visible amount of item shown in relation to root
+};
+
+const io = new IntersectionObserver(entries => {
+  for (const entry of entries) {
+    if (entry.isIntersecting) {
+      entry.target.src = entry.target.dataset.src
+      io.unobserve(entry.target)
+    }
+  }
+}, options)
+window.addEventListener("load", () => {
+  const images = document.querySelectorAll('.restaurant-img');
+  for (const image of images) {
+    io.observe(image);
+  }
+})

@@ -46,8 +46,7 @@ self.addEventListener("install", event => {
         "/index.html",
         "/restaurant.html",
         "/reviews.html",
-        "/css/styles.css",
-        "/images/"
+        "/css/styles.css"
         ])
         .catch(e => {
           console.log("Caching failed: " + e);
